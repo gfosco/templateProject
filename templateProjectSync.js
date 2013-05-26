@@ -152,7 +152,6 @@ function makeTemplate(options) {
 		if (result) failExit('Result returned while overwriting product.xcodeproj/project.xcworkspace/contents.xcworkspacedata.');
 
 		var zipCommand = 'cd ' + working_folder + ' && zip -q -r ../.' + output_folder + '/' + product + '.zip * && cd ../../';		
-console.log(zipCommand);
 		result = execSync.exec(zipCommand);
 		if (result.code) failExit('Return code ' + result.code + ' while zipping project for token: ' + ourToken);
 
@@ -168,6 +167,6 @@ console.log(zipCommand);
 function failExit(reason, code) { 
 
 	console.log('Fatal error: ' + reason);
-	process.exit(code);
+	process.exit(code >= 0 ? code : -1);
 
 }
