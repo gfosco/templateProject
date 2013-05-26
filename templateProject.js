@@ -74,7 +74,7 @@ function makeTemplate(options) {
 		result = execSync.exec('mkdir ' + output_folder);
 		if (result.code) failExit('Return code ' + result.code + ' while making output_folder for token: ' + ourToken);
 
-		var copyCommand = 'cd ' + template_folder + ' && cp -R * ' + working_folder + ' && cd ../..';	
+		var copyCommand = 'cd ' + template_folder + ' && cp -R * ../.' + working_folder + ' && cd ../..';	
 		console.log(copyCommand);	
 		result = execSync.exec(copyCommand);
 		if (result.code) failExit('Return code ' + result.code + ' while copying template for token: ' + ourToken);
