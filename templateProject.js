@@ -81,7 +81,20 @@ function makeTemplate(options) {
 		result = execSync.exec('mv ' + working_folder + old_product + ' ' + working_folder + product);
 		if (result.code) failExit('Return code ' + result.code + ' while renaming product folder.');
 
-		
+		result = execSync.exec('mv ' + working_folder + old_product + '.xcodeproj ' + working_folder + product + '.xcodeproj');
+		if (result.code) failExit('Return code ' + result.code + ' while renaming product.xcodeproj folder.');
+
+		result = execSync.exec('mv ' + working_folder + product + '/' + old_product + '-Prefix.pch ' + working_folder + product + '/' + product + '-Prefix.pch');
+		if (result.code) failExit('Return code ' + result.code + ' while renaming product-Prefix.pch file.');
+
+		result = execSync.exec('mv ' + working_folder + product + '/' + old_product + '-Info.plist ' + working_folder + product + '/' + product + '-Info.plist');
+		if (result.code) failExit('Return code ' + result.code + ' while renaming product-Info.plist file.');
+
+		var xcpj = fs.readFileSync(working_folder + product + '/' + product + '.xcodeproj/project.pbxproj','utf8');
+		xcpj = xcpj.replace(new RegExp(old_product,'g'),product);
+		xcpj = xcpj.replace(new RegExp(old_org,'g'),org);
+		result = fs.writeFileSync(working_folder + product + '/' + product + '.xcodeproj/project.pbxproj',xcpj,'utf8');
+		if (result) failExit('Result returned while overwriting product.xcodeproj/project.pbxproj');
 
 		failExit('Just kidding.. all good.',0);
 
