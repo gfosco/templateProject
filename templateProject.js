@@ -8,11 +8,19 @@ var rack = hat.rack();
 
 var http = require('http'),
 	fs = require('fs'),
-	exec = require('exec');
+	execSync = require('execSync');
 
 var Templates = {'QWERTYPROD':101};
-var InProcess = {};
-var State = {};
+var Replace = {
+	'QWERTYPROD' : {
+		'product' : 'QWERTYPROD',
+		'organization' : 'QWERTYORG',
+		'bundle' : 'QWERTYBUNDLEPFX',
+		'parseAppId' : 'QWERTYAPPID',
+		'parseKey' : 'QWERTYKEY',
+		'name' : 'QWERTYNAME'
+	}
+}
 
 makeTemplate();
 
@@ -45,7 +53,37 @@ function makeTemplate(options) {
 
 	if (Templates[template]) {
 
-		failExit('Just kidding, all good so far.',0);
+		var old_product = Replace[template]['product'];
+		var old_org = Replace[template]['organization'];
+		var old_bundle = Replace[template]['bundle'];
+		var old_appid = Replace[template]['parseAppId'];
+		var old_key = Replace[template]['parseKey'];
+		var old_name = Replace[template]['name'];
+
+		var ourToken = rack();
+		console.log('Unique token ' + ourToken + ' generated.');
+
+		var template_folder = './xcode_projects/' + template + '/'
+		var working_folder = './working_folder/' + ourToken + '/';
+		var output_folder = './output_folder/' + ourToken + '/';
+
+		// Let's start by just setting up directories:
+		var result = execSync.exec('mkdir ' + working_folder);
+		if (result.code) failExit('Return code ' + result.code + ' while making working_folder for token: ' + ourToken);
+
+		result = execSync.exec('mkdir ' + output_folder);
+		if (result.code) failExit('Return code ' + result.code + ' while making output_folder for token: ' + ourToken);
+
+		var copyCommand = 'cp -R ' + template_folder + ' ' + working_folder;		
+		result = execSync.exec(copyCommand);
+		if (result.code) failExit('Return code ' + result.code + ' while copying template for token: ' + ourToken);
+
+		result = execSync.exec('mv ' + working_folder + old_product + ' ' + working_folder + product);
+		if (result.code) failExit('Return code ' + result.code + ' while renaming product folder.');
+
+		
+
+		failExit('Just kidding.. all good.',0);
 
 	} else {
 		failExit('Invalid template',10);
