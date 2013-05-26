@@ -74,7 +74,7 @@ function makeTemplate(options) {
 		result = execSync.exec('mkdir ' + output_folder);
 		if (result.code) failExit('Return code ' + result.code + ' while making output_folder for token: ' + ourToken);
 
-		var copyCommand = 'cp -R ' + template_folder + ' ' + working_folder;		
+		var copyCommand = 'cd ' + template_folder + ' && cp -R * ' + working_folder + ' && cd ../..';		
 		result = execSync.exec(copyCommand);
 		if (result.code) failExit('Return code ' + result.code + ' while copying template for token: ' + ourToken);
 
@@ -149,6 +149,12 @@ function makeTemplate(options) {
 		xcpj = xcpj.replace(new RegExp(old_product,'g'),product);
 		result = fs.writeFileSync(working_folder + product + '.xcodeproj/project.xcworkspace/contents.xcworkspacedata',xcpj,'utf8');
 		if (result) failExit('Result returned while overwriting product.xcodeproj/project.xcworkspace/contents.xcworkspacedata.');
+
+		var zipCommand = 'cd ' + working_folder + ' && zip -q -r ../.' + output_folder + '/' + product + '.zip * && cd ../../';		
+console.log(zipCommand);
+		result = execSync.exec(zipCommand);
+		if (result.code) failExit('Return code ' + result.code + ' while zipping project for token: ' + ourToken);
+
 
 		failExit('Just kidding.. all good.',0);
 
