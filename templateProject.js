@@ -90,11 +90,65 @@ function makeTemplate(options) {
 		result = execSync.exec('mv ' + working_folder + product + '/' + old_product + '-Info.plist ' + working_folder + product + '/' + product + '-Info.plist');
 		if (result.code) failExit('Return code ' + result.code + ' while renaming product-Info.plist file.');
 
-		var xcpj = fs.readFileSync(working_folder + product + '/' + product + '.xcodeproj/project.pbxproj','utf8');
+		var xcpj = fs.readFileSync(working_folder + product + '.xcodeproj/project.pbxproj','utf8');
 		xcpj = xcpj.replace(new RegExp(old_product,'g'),product);
 		xcpj = xcpj.replace(new RegExp(old_org,'g'),org);
-		result = fs.writeFileSync(working_folder + product + '/' + product + '.xcodeproj/project.pbxproj',xcpj,'utf8');
-		if (result) failExit('Result returned while overwriting product.xcodeproj/project.pbxproj');
+		result = fs.writeFileSync(working_folder + product + '.xcodeproj/project.pbxproj',xcpj,'utf8');
+		if (result) failExit('Result returned while overwriting product.xcodeproj/project.pbxproj.');
+
+		var appdh = fs.readFileSync(working_folder + product + '/AppDelegate.h','utf8');
+		appdh = appdh.replace(new RegExp(old_product,'g'),product);
+		appdh = appdh.replace(new RegExp(old_org,'g'),org);
+		appdh = appdh.replace(new RegExp(old_name,'g'),name);
+		result = fs.writeFileSync(working_folder + product + '/AppDelegate.h',appdh,'utf8');
+		if (result) failExit('Result returned while overwriting product/AppDelegate.h.');
+
+		var appdh = fs.readFileSync(working_folder + product + '/AppDelegate.m','utf8');
+		appdh = appdh.replace(new RegExp(old_product,'g'),product);
+		appdh = appdh.replace(new RegExp(old_org,'g'),org);
+		appdh = appdh.replace(new RegExp(old_name,'g'),name);
+		appdh = appdh.replace(new RegExp(old_appid,'g'),appid);
+		appdh = appdh.replace(new RegExp(old_key,'g'),key);
+		result = fs.writeFileSync(working_folder + product + '/AppDelegate.m',appdh,'utf8');
+		if (result) failExit('Result returned while overwriting product/AppDelegate.m.');
+
+		xcpj = fs.readFileSync(working_folder + product + '/' + product + '-Prefix.pch','utf8');
+		xcpj = xcpj.replace(new RegExp(old_product,'g'),product);
+		result = fs.writeFileSync(working_folder + product + '/' + product + '-Prefix.pch',xcpj,'utf8');
+		if (result) failExit('Result returned while overwriting product/product-Prefix.pch.');
+
+		appdh = fs.readFileSync(working_folder + product + '/' + product + '-Info.plist','utf8');
+		appdh = appdh.replace(new RegExp(old_bundle,'g'),bundle);
+		result = fs.writeFileSync(working_folder + product + '/' + product + '-Info.plist',appdh,'utf8');
+		if (result) failExit('Result returned while overwriting product/AppDelegate.m.');
+
+		appdh = fs.readFileSync(working_folder + product + '/ViewController.h','utf8');
+		appdh = appdh.replace(new RegExp(old_product,'g'),product);
+		appdh = appdh.replace(new RegExp(old_org,'g'),org);
+		appdh = appdh.replace(new RegExp(old_name,'g'),name);
+		result = fs.writeFileSync(working_folder + product + '/ViewController.h',appdh,'utf8');
+		if (result) failExit('Result returned while overwriting product/ViewController.h.');
+
+		appdh = fs.readFileSync(working_folder + product + '/ViewController.m','utf8');
+		appdh = appdh.replace(new RegExp(old_product,'g'),product);
+		appdh = appdh.replace(new RegExp(old_org,'g'),org);
+		appdh = appdh.replace(new RegExp(old_name,'g'),name);
+		appdh = appdh.replace(new RegExp(old_appid,'g'),appid);
+		appdh = appdh.replace(new RegExp(old_key,'g'),key);
+		result = fs.writeFileSync(working_folder + product + '/ViewController.m',appdh,'utf8');
+		if (result) failExit('Result returned while overwriting product/ViewController.m.');
+
+		appdh = fs.readFileSync(working_folder + product + '/main.m','utf8');
+		appdh = appdh.replace(new RegExp(old_product,'g'),product);
+		appdh = appdh.replace(new RegExp(old_org,'g'),org);
+		appdh = appdh.replace(new RegExp(old_name,'g'),name);
+		result = fs.writeFileSync(working_folder + product + '/main.m',appdh,'utf8');
+		if (result) failExit('Result returned while overwriting product/main.m.');
+
+		xcpj = fs.readFileSync(working_folder + product + '.xcodeproj/project.xcworkspace/contents.xcworkspacedata','utf8');
+		xcpj = xcpj.replace(new RegExp(old_product,'g'),product);
+		result = fs.writeFileSync(working_folder + product + '.xcodeproj/project.xcworkspace/contents.xcworkspacedata',xcpj,'utf8');
+		if (result) failExit('Result returned while overwriting product.xcodeproj/project.xcworkspace/contents.xcworkspacedata.');
 
 		failExit('Just kidding.. all good.',0);
 
