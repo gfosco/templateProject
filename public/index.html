@@ -49,7 +49,7 @@
 
     <div class="container">
 
-      <form class="form-signin" method="POST" action="/" onsubmit="return validateForm();">
+      <form class="form-signin" method="POST" action="/">
         <h2 class="form-signin-heading">Really Quick Start</h2>
         <input type="text" class="input-block-level" placeholder="Product Name" name="product" id="product">
         <input type="text" class="input-block-level" placeholder="Organization Name" name="organization" id="organization">
@@ -57,7 +57,7 @@
         <input type="text" class="input-block-level" placeholder="Parse App Id" name="parseappid" id="parseappid">
         <input type="text" class="input-block-level" placeholder="Parse Client Key" name="parsekey" id="parsekey">
         <input type="text" class="input-block-level" placeholder="Bundle Identifier (com.company)" name="bundlepfx" id="bundlepfx">
-        <button class="btn btn-large btn-primary" type="submit" id="#btnbtn">Get It</button>
+        <button class="btn btn-large btn-primary" type="submit" id="#btnbtn" onclick="return validateForm();">Get It</button>
       </form>
 
     </div> <!-- /container -->
