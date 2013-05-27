@@ -21,7 +21,7 @@ var Templates = {
 	}
 }
 
-makeTemplate();
+makeTemplate(process.env);
 
 function mockOptions() { 
 
@@ -148,11 +148,11 @@ function makeTemplate(options) {
 		result = fs.writeFileSync(working_folder + product + '.xcodeproj/project.xcworkspace/contents.xcworkspacedata',xcpj,'utf8');
 		if (result) exitWithMessageAndCode('Result returned while overwriting product.xcodeproj/project.xcworkspace/contents.xcworkspacedata.');
 
-		var zipCommand = 'cd ' + working_folder + ' && zip -q -r ../.' + output_folder + '/' + product + '.zip * && cd ../../';		
+		var zipCommand = 'cd ' + working_folder + ' && zip -q -r ../.' + output_folder + product + '.zip * && cd ../../';		
 		result = execSync.exec(zipCommand);
 		if (result.code) exitWithMessageAndCode('Return code ' + result.code + ' while zipping project for token: ' + ourToken);
 
-		exitWithMessageAndCode(output_folder + '/' + product + '.zip',0);
+		exitWithMessageAndCode(output_folder + product + '.zip',0);
 
 	} else {
 		exitWithMessageAndCode('Invalid template',10);
