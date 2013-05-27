@@ -57,7 +57,7 @@
         <input type="text" class="input-block-level" placeholder="Parse App Id" name="parseappid" id="parseappid">
         <input type="text" class="input-block-level" placeholder="Parse Client Key" name="parsekey" id="parsekey">
         <input type="text" class="input-block-level" placeholder="Bundle Identifier (com.company)" name="bundlepfx" id="bundlepfx">
-        <button class="btn btn-large btn-primary" type="submit" id="#btnbtn" onclick="return validateForm();">Get It</button>
+        <button class="btn btn-large btn-primary" type="submit" id="#btnbtn">Get It</button>
       </form>
 
     </div> <!-- /container -->
@@ -66,6 +66,7 @@
   <script type="text/javascript">
   var busy = 0;
   function validateForm() { 
+    alert('hi');
     if (busy) return false;
     if (!($('#product').val() && $('#organization').val() && $('#devname').val() && $('#parseappid').val() && $('#parsekey').val() && $('#bundlepfx').val())) {
         alert('Please fill out all the fields.');
