@@ -49,20 +49,24 @@
 
     <div class="container">
 
-      <form class="form-signin" method="POST" action="/">
+      <form class="form-signin" method="POST" action="/" onsubmit="return validateForm();">
         <h2 class="form-signin-heading">Really Quick Start</h2>
-        <input type="text" class="input-block-level" placeholder="Product Name" name="product">
-        <input type="text" class="input-block-level" placeholder="Organization Name" name="organization">
-        <input type="text" class="input-block-level" placeholder="Developer Name" name="devname">
-        <input type="text" class="input-block-level" placeholder="Parse App Id" name="parseappid">
-        <input type="text" class="input-block-level" placeholder="Parse Client Key" name="parsekey">
-        <input type="text" class="input-block-level" placeholder="Bundle Identifier (com.company)" name="bundlepfx">
+        <input type="text" class="input-block-level" placeholder="Product Name" name="product" id="product">
+        <input type="text" class="input-block-level" placeholder="Organization Name" name="organization" id="organization">
+        <input type="text" class="input-block-level" placeholder="Developer Name" name="devname" id="devname">
+        <input type="text" class="input-block-level" placeholder="Parse App Id" name="parseappid" id="parseappid">
+        <input type="text" class="input-block-level" placeholder="Parse Client Key" name="parsekey" id="parsekey">
+        <input type="text" class="input-block-level" placeholder="Bundle Identifier (com.company)" name="bundlepfx" id="bundlepfx">
         <button class="btn btn-large btn-primary" type="submit">Get It</button>
       </form>
 
     </div> <!-- /container -->
 
   <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
-
+  <script type="text/javascript">
+  function validateForm() { 
+    if (!$(''))
+  }
+  </script>
   </body>
 </html>

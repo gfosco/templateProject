@@ -39,9 +39,9 @@ router.post('/', function (req, res) {
 			'env':{
 				'product':fields.product,
 				'organization':fields.organization,
-				'devname':fields.devname,
-				'appid':fields.parseappid,
-				'key':fields.parsekey,
+				'name':fields.devname,
+				'parseAppId':fields.parseappid,
+				'parseKey':fields.parsekey,
 				'bundle':fields.bundlepfx
 			}
 		},
