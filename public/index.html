@@ -69,12 +69,12 @@
   function validateForm() { 
     alert('hi');
     if (busy) return false;
-    var product = $('#product');
-    var organization = $('#organization');
-    var devname = $('#devname');
-    var appid = $('#parseappid');
-    var key = $('#parsekey');
-    var bundle = $('#bundlepfx');
+    var product = $('#product').val();
+    var organization = $('#organization').val();
+    var devname = $('#devname').val();
+    var appid = $('#parseappid').val();
+    var key = $('#parsekey').val();
+    var bundle = $('#bundlepfx').val();
     if (!product || !organization || !devname || !appid || !key || !bundle) {
         alert('Please fill out all the fields.');
         return false;
