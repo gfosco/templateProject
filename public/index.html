@@ -68,7 +68,13 @@
   function validateForm() { 
     alert('hi');
     if (busy) return false;
-    if (!($('#product').val() && $('#organization').val() && $('#devname').val() && $('#parseappid').val() && $('#parsekey').val() && $('#bundlepfx').val())) {
+    var product = $('#product');
+    var organization = $('#organization');
+    var devname = $('#devname');
+    var appid = $('#parseappid');
+    var key = $('#parsekey');
+    var bundle = $('#bundlepfx');
+    if (!product || !organization || !devname || !appid || !key || !bundle) {
         alert('Please fill out all the fields.');
         return false;
     }
