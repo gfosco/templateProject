@@ -59,8 +59,14 @@ function makeTemplate(options) {
 	var key = options['parseKey'] || defaultOptions.parseKey;
 	var name = options['name'] || defaultOptions.name;
 	var template = options['template'] || defaultOptions.template;
+	var fbid = '';
+	var fbname = '';
 
-	if (options['fbid'] && options['fbname']) template = 'HACKPROD';
+	if (options['fbid'] && options['fbname']) {
+		template = 'HACKPROD';
+		fbid = options['fbid'];
+		fbname = options['fbname'];
+	}
 
 	if (Templates[template]) {
 
@@ -69,7 +75,9 @@ function makeTemplate(options) {
 			old_bundle = Templates[template]['bundle'],
 			old_appid = Templates[template]['parseAppId'],
 			old_key = Templates[template]['parseKey'],
-			old_name = Templates[template]['name'];
+			old_name = Templates[template]['name'],
+			old_fbid = Templates[template]['fbid'],
+			old_fbname = Templates[template]['fbname'];
 
 		var ourToken = rack();
 
@@ -129,6 +137,10 @@ function makeTemplate(options) {
 
 		appdh = fs.readFileSync(working_folder + product + '/' + product + '-Info.plist','utf8');
 		appdh = appdh.replace(new RegExp(old_bundle,'g'),bundle);
+		if (template == 'HACKPROD') {
+			appdh = appdh.replace(new RegExp(old_fbid,'g'),fbid);
+			appdh = appdh.replace(new RegExp(old_fbname,'g'),fbname);
+		}
 		result = fs.writeFileSync(working_folder + product + '/' + product + '-Info.plist',appdh,'utf8');
 		if (result) exitWithMessageAndCode('Result returned while overwriting product/AppDelegate.m.');
 
