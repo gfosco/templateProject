@@ -42,7 +42,9 @@ router.post('/', function (req, res) {
 				'name':fields.devname,
 				'parseAppId':fields.parseappid,
 				'parseKey':fields.parsekey,
-				'bundle':fields.bundlepfx
+				'bundle':fields.bundlepfx,
+				'fbid':(fields.fbid ? fields.fbid : ''),
+				'fbid':(fields.fbname ? fields.fbname : '')
 			}
 		},
 			function (error, stdout, stderr) {
