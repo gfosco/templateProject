@@ -51,13 +51,22 @@
 
       <form class="form-signin" method="POST" action="/" onsubmit="return validateForm();">
         <h2 class="form-signin-heading">Really Quick Start</h2>
+        <p>Enter these details and get a fully configured XCode Project with Parse preconfigured:</p>
         <input type="text" class="input-block-level" placeholder="Product Name" name="product" id="product">
         <input type="text" class="input-block-level" placeholder="Organization Name" name="organization" id="organization">
         <input type="text" class="input-block-level" placeholder="Developer Name" name="devname" id="devname">
         <input type="text" class="input-block-level" placeholder="Parse App Id" name="parseappid" id="parseappid">
         <input type="text" class="input-block-level" placeholder="Parse Client Key" name="parsekey" id="parsekey">
         <input type="text" class="input-block-level" placeholder="Bundle Identifier (com.company)" name="bundlepfx" id="bundlepfx">
-        <button class="btn btn-large btn-primary" type="submit" id="btnbtn">Get It</button>
+
+        <p>Enter these optional fields to have the Facebook SDK included and configured:</p>
+
+        <input type="text" class="input-block-level" placeholder="Facebook App Id" name="fbid" id="fbid">
+        <input type="text" class="input-block-level" placeholder="FB App Display Name" name="fbname" id="fbname">        
+
+        <p>Then click below and wait ~7 seconds for the download to start.
+
+        <button class="btn btn-large btn-primary" type="submit" id="btnbtn">Get Custom Project!</button>
       </form>
 
     </div> <!-- /container -->

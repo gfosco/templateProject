@@ -18,6 +18,16 @@ var Templates = {
 		'parseAppId' : 'QWERTYAPPID',
 		'parseKey' : 'QWERTYKEY',
 		'name' : 'QWERTYNAME'
+	},
+	'HACKPROD' : {
+		'product' : 'HACKPROD',
+		'organization' : 'HACKORG',
+		'bundle' : 'HACKBUNDLE',
+		'parseAppId' : 'HACKAPPID',
+		'parseKey' : 'HACKKEY',
+		'name' : 'HACKNAME',
+		'fbid' : '475121865870836',
+		'fbname' : 'HACKDISPLAYNAME'
 	}
 }
 
@@ -49,6 +59,8 @@ function makeTemplate(options) {
 	var key = options['parseKey'] || defaultOptions.parseKey;
 	var name = options['name'] || defaultOptions.name;
 	var template = options['template'] || defaultOptions.template;
+
+	if (options['fbid'] && options['fbname']) template = 'HACKPROD';
 
 	if (Templates[template]) {
 
