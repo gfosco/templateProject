@@ -36,9 +36,10 @@ router.post('/', function (req, res) {
 
 		log('Starting template customization');
 		var enablearray = [];
-		if (fields.enable_push == 1) enablearray.push('PUSH');
-		if (fields.enable_analytics == 1) enablearray.push('ANALYTICS');
-		if (fields.enable_testobj == 1) enablearray.push('PUSH');
+		if (fields.enable_push == 'on') enablearray.push('PUSH');
+		if (fields.enable_analytics == 'on') enablearray.push('ANALYTICS');
+		if (fields.enable_testobj == 'on') enablearray.push('TESTOBJ');
+		console.log(enablearray);
 		var child = exec('node templateProjectSync.js', {
 			'env':{
 				'product':fields.product,
@@ -49,7 +50,7 @@ router.post('/', function (req, res) {
 				'bundle':fields.bundlepfx,
 				'fbid':(fields.fbid ? fields.fbid : ''),
 				'fbname':(fields.fbname ? fields.fbname : ''),
-				'enable':enablearray
+				'enable':enablearray ? enablearray : ['NONE']
 			}
 		},
 			function (error, stdout, stderr) {
