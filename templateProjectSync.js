@@ -2,7 +2,7 @@
 // Provide all the standard details and get a project ready to go, with the right folder names and nothing left to rename.
 
 
-// hat rack provides collision free random hashes
+// hat rack provides collision free hashes
 var hat = require('hat');
 var rack = hat.rack();
 
@@ -17,7 +17,10 @@ var Templates = {
 		'bundle' : 'QWERTYBUNDLEPFX',
 		'parseAppId' : 'QWERTYAPPID',
 		'parseKey' : 'QWERTYKEY',
-		'name' : 'QWERTYNAME'
+		'name' : 'QWERTYNAME',
+		'ENABLE_FLAGS': {
+			'AppDelegate.m':['ANALYTICS','PUSH','TESTOBJ']
+		}
 	},
 	'HACKPROD' : {
 		'product' : 'HACKPROD',
@@ -27,7 +30,10 @@ var Templates = {
 		'parseKey' : 'HACKKEY',
 		'name' : 'HACKNAME',
 		'fbid' : '475121865870836',
-		'fbname' : 'HACKDISPLAYNAME'
+		'fbname' : 'HACKDISPLAYNAME',
+		'ENABLE_FLAGS': {
+			'AppDelegate.m':['ANALYTICS','PUSH','TESTOBJ']
+		}
 	}
 }
 
@@ -42,7 +48,8 @@ function mockOptions() {
 		'parseAppId':'fExC5sYySPHdXpkBuRZv1zilESZXuuMrKh74Xuxf',
 		'parseKey':'7jMYzK1KALmQlslDb2szdGpSuOAaGhWyDJh2ayD4',
 		'name':'Fosco',
-		'template':'QWERTYPROD'
+		'template':'QWERTYPROD',
+		'enable':['PUSH','ANALYTICS','TESTOBJ']
 	};
 
 }
@@ -59,6 +66,7 @@ function makeTemplate(options) {
 	var key = options['parseKey'] || defaultOptions.parseKey;
 	var name = options['name'] || defaultOptions.name;
 	var template = options['template'] || defaultOptions.template;
+	var enable = options['enable'] || defaultOptions.enable;
 	var fbid = '';
 	var fbname = '';
 
@@ -84,6 +92,7 @@ function makeTemplate(options) {
 		var template_folder = './xcode_projects/' + template + '/'
 		var working_folder = './working_folder/' + ourToken + '/';
 		var output_folder = './output_folder/' + ourToken + '/';
+		var temp;
 
 		// Let's start by just setting up directories:
 		var result = execSync.exec('mkdir ' + working_folder);
@@ -127,6 +136,16 @@ function makeTemplate(options) {
 		appdh = appdh.replace(new RegExp(old_name,'g'),name);
 		appdh = appdh.replace(new RegExp(old_appid,'g'),appid);
 		appdh = appdh.replace(new RegExp(old_key,'g'),key);
+		if (temp = Templates[template]['ENABLE_FLAGS']['AppDelegate.m']) {
+			for (var i = 0; i < temp.length; i++) {
+				if (enable.indexOf(temp[i]) !== -1) {
+					appdh = appdh.replace(new RegExp('\\/\\* ENABLE_' + temp[i],'g'),'');
+					appdh = appdh.replace(new RegExp('ENABLE_' + temp[i] + ' \\*\\/','g'),'');
+				} else {
+
+				}
+			}
+		}
 		result = fs.writeFileSync(working_folder + product + '/AppDelegate.m',appdh,'utf8');
 		if (result) exitWithMessageAndCode('Result returned while overwriting product/AppDelegate.m.');
 

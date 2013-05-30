@@ -35,6 +35,10 @@ router.post('/', function (req, res) {
 		console.log(files);
 
 		log('Starting template customization');
+		var enablearray = [];
+		if (fields.enable_push == 1) enablearray.push('PUSH');
+		if (fields.enable_analytics == 1) enablearray.push('ANALYTICS');
+		if (fields.enable_testobj == 1) enablearray.push('PUSH');
 		var child = exec('node templateProjectSync.js', {
 			'env':{
 				'product':fields.product,
@@ -44,7 +48,8 @@ router.post('/', function (req, res) {
 				'parseKey':fields.parsekey,
 				'bundle':fields.bundlepfx,
 				'fbid':(fields.fbid ? fields.fbid : ''),
-				'fbname':(fields.fbname ? fields.fbname : '')
+				'fbname':(fields.fbname ? fields.fbname : ''),
+				'enable':enablearray
 			}
 		},
 			function (error, stdout, stderr) {
