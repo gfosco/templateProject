@@ -1,0 +1,25 @@
+{
+  "name": "templateProject",
+  "version": "0.0.0",
+  "description": "template project generator",
+  "main": "templateService.js",
+  "dependencies": {
+    "choreographer": "~0.3.0",
+    "formidable": "~1.0.14",
+    "execSync": "~0.0.4",
+    "hat": "~0.0.3",
+    "node-static": "~0.6.9"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/gfosco/templateProject.git"
+  },
+  "author": "",
+  "license": "BSD",
+  "readmeFilename": "README.md",
+  "gitHead": "a51a78f1b38f625a7462fa32785155ae7d29bc7f"
+}

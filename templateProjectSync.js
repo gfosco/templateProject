@@ -68,6 +68,10 @@ function makeTemplate(options) {
 		fbname = options['fbname'];
 	}
 
+	if (!product.match(/^[\w_-]+$/)) {
+		exitWithMessageAndCode("Invalid Product Name.");
+	}
+
 	if (Templates[template]) {
 
 		var old_product = Templates[template]['product'],
