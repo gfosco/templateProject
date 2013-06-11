@@ -44,7 +44,7 @@ if (!process.env.template && process.env.TESTMODE != 1) {
 
 // The Product Name variable is the only potentially dangerous value, as it is used in exec functions and as a filepath parameter.
 // This is easily sanitized by requiring only letters, numbers, and dash/underscore.
-if (!process.env.product || !process.env.product.match(/^[\w]+$/)) {
+if (process.env.TESTMODE != 1 && (!process.env.product || !process.env.product.match(/^[\w _-]+$/))) {
 	exitWithMessageAndCode('Product name invalid.',70);
 }
 
