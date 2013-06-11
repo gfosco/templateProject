@@ -1,28 +1,28 @@
-// Custom XCode Project maker.
-// Provide all the standard details and get a project ready to go, with the right folder names and nothing left to rename.
+// Really Quick Start
+// Template-based system for customizing development projects.
+// 
+// This is a synchronous command-line script that uses environment variables
+// It is run by the web service, which sets the environment variables based on the POST data
 
-
-// hat rack provides collision free hashes
+// Node JS Module includes
+// hat provides collision free hash generation functions
 var hat = require('hat');
-var rack = hat.rack();
+var http = require('http');
+var fs = require('fs');
+// execSync is a layer around the 'child-process' modules 'exec' method
+var execSync = require('execSync');
 
-var http = require('http'),
-	fs = require('fs'),
-	execSync = require('execSync');
-
+// Define the templates, the available options and the search/replace tokens.
 var Templates = {
-	'QWERTYPROD' : {
+	'QWERTYPROD' : {  // QWERTYPROD contains a Single-Page Application XCode Template with Storyboards and Parse.
 		'product' : 'QWERTYPROD',
 		'organization' : 'QWERTYORG',
 		'bundle' : 'QWERTYBUNDLEPFX',
 		'parseAppId' : 'QWERTYAPPID',
 		'parseKey' : 'QWERTYKEY',
-		'name' : 'QWERTYNAME',
-		'ENABLE_FLAGS': {
-			'AppDelegate.m':['ANALYTICS','PUSH','TESTOBJ']
-		}
+		'name' : 'QWERTYNAME'
 	},
-	'HACKPROD' : {
+	'HACKPROD' : { // HACKPROD contains a Single-Page Application XCode template with Storyboards, Parse, and the Facebook SDK.
 		'product' : 'HACKPROD',
 		'organization' : 'HACKORG',
 		'bundle' : 'HACKBUNDLE',
@@ -30,11 +30,16 @@ var Templates = {
 		'parseKey' : 'HACKKEY',
 		'name' : 'HACKNAME',
 		'fbid' : '475121865870836',
-		'fbname' : 'HACKDISPLAYNAME',
-		'ENABLE_FLAGS': {
-			'AppDelegate.m':['ANALYTICS','PUSH','TESTOBJ']
-		}
+		'fbname' : 'HACKDISPLAYNAME'
 	}
+}
+
+// get a collision free hash function
+var rack = hat.rack();
+
+// check if the template environment variable is populated
+if (!process.env.template && process.env.TESTMODE != 1) {
+	exitWithMessageAndCode('Template not provided.',80);
 }
 
 makeTemplate(process.env);
