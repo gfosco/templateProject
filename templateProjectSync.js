@@ -2,7 +2,7 @@
 // Template-based system for customizing development projects.
 // 
 // This is a synchronous command-line script that uses environment variables
-// It is run by the web service, which sets the environment variables based on the POST data
+// It is run by the web service, which sets the environment variables based on POST data
 
 // Node JS Module includes
 // hat provides collision free hash generation functions
@@ -52,9 +52,12 @@ if (process.env.TESTMODE != 1 && (!process.env.product || !process.env.product.m
 //       the templated based on the provided values.
 process.env.template = process.env.fbid ? 'HACKPROD' : 'QWERTYPROD';
 
-
-// None of the values are optional, so lets check they're all provided.
-// The only v
+// Check that the standard options have been provided:
+var valid = 1;
+if (process.env.TESTMODE != 1 && (!process.env.organization || !process.env.bundle || !process.env.parseAppId || !process.env.parseKey || !process.env.name)) valid = 0;
+if (!valid) {
+	exitWithMessageAndCode('Request failed validation.',60);
+}
 
 // Run the process.
 makeTemplate(process.env);
@@ -126,7 +129,7 @@ function makeTemplate(options) {
 		if (result.code) exitWithMessageAndCode('Return code ' + result.code + ' while making output_folder for token: ' + ourToken);
 
 		// Copy the template folder into our working folder:
-		var copyCommand = 'cd ' + template_folder + ' && cp -R * ../.' + working_folder + ' && cd ../..';	
+		var copyCommand = 'cd ' + template_folder + ' && cp -R * ../.' + working_folder;	
 		result = execSync.exec(copyCommand);
 		if (result.code) exitWithMessageAndCode('Return code ' + result.code + ' while copying template for token: ' + ourToken);
 
@@ -141,76 +144,74 @@ function makeTemplate(options) {
 		if (result.code) exitWithMessageAndCode('Return code ' + result.code + ' while renaming product-Info.plist file.');
 
 		// Rewrite the project.pbxproj file:
-		var fileData = fs.readFileSync(working_folder + product + '.xcodeproj/project.pbxproj','utf8');
-		fileData = fileData.replace(new RegExp(old_product,'g'),product);
-		fileData = fileData.replace(new RegExp(old_org,'g'),org);
-		result = fs.writeFileSync(working_folder + product + '.xcodeproj/project.pbxproj',fileData,'utf8');
+		result = rewriteFileWithChanges(working_folder + product + '.xcodeproj/project.pbxproj',[ 
+			{ before:old_product, after:product }, 
+			{ before:old_org, after:org },
+		]);		
 		if (result) exitWithMessageAndCode('Result returned while overwriting product.xcodeproj/project.pbxproj.');
 
 		// Rewrite the AppDelegate.h file:
-		fileData = fs.readFileSync(working_folder + product + '/AppDelegate.h','utf8');
-		fileData = fileData.replace(new RegExp(old_product,'g'),product);
-		fileData = fileData.replace(new RegExp(old_org,'g'),org);
-		fileData = fileData.replace(new RegExp(old_name,'g'),name);
-		result = fs.writeFileSync(working_folder + product + '/AppDelegate.h',fileData,'utf8');
+		result = rewriteFileWithChanges(working_folder + product + '/AppDelegate.h',[ 
+			{ before:old_product, after:product }, 
+			{ before:old_org, after:org },
+			{ before:old_name, after:name }
+		]);
 		if (result) exitWithMessageAndCode('Result returned while overwriting product/AppDelegate.h.');
 
 		// Rewrite the AppDelegate.m file:
-		fileData = fs.readFileSync(working_folder + product + '/AppDelegate.m','utf8');
-		fileData = fileData.replace(new RegExp(old_product,'g'),product);
-		fileData = fileData.replace(new RegExp(old_org,'g'),org);
-		fileData = fileData.replace(new RegExp(old_name,'g'),name);
-		fileData = fileData.replace(new RegExp(old_appid,'g'),appid);
-		fileData = fileData.replace(new RegExp(old_key,'g'),key);
-		result = fs.writeFileSync(working_folder + product + '/AppDelegate.m',fileData,'utf8');
+		result = rewriteFileWithChanges(working_folder + product + '/AppDelegate.m',[ 
+			{ before:old_product, after:product }, 
+			{ before:old_org, after:org },
+			{ before:old_name, after:name },
+			{ before:old_appid, after:appid },
+			{ before:old_key, after:key }
+		]);		
 		if (result) exitWithMessageAndCode('Result returned while overwriting product/AppDelegate.m.');
 
 		// Rewrite the Prefix.pch file:
-		fileData = fs.readFileSync(working_folder + product + '/' + product + '-Prefix.pch','utf8');
-		fileData = fileData.replace(new RegExp(old_product,'g'),product);
-		result = fs.writeFileSync(working_folder + product + '/' + product + '-Prefix.pch',fileData,'utf8');
+		result = rewriteFileWithChanges(working_folder + product + '/' + product + '-Prefix.pch',[ 
+			{ before:old_product, after:product } 
+		]);				
 		if (result) exitWithMessageAndCode('Result returned while overwriting product/product-Prefix.pch.');
 
 		// Rewrite the Info.plist file:
-		fileData = fs.readFileSync(working_folder + product + '/' + product + '-Info.plist','utf8');
-		fileData = fileData.replace(new RegExp(old_bundle,'g'),bundle);
-		if (template == 'HACKPROD') {
-			fileData = fileData.replace(new RegExp(old_fbid,'g'),fbid);
-			fileData = fileData.replace(new RegExp(old_fbname,'g'),fbname);
-		}
-		result = fs.writeFileSync(working_folder + product + '/' + product + '-Info.plist',fileData,'utf8');
+		result = rewriteFileWithChanges(working_folder + product + '/' + product + '-Info.plist',[ 
+			{ before:old_bundle, after:bundle }, 
+			{ before:old_fbid, after:fbid },
+			{ before:old_fbname, after:fbname }
+		]);		
 		if (result) exitWithMessageAndCode('Result returned while overwriting product/AppDelegate.m.');
 
 		// Rewrite the ViewController.h file:
-		fileData = fs.readFileSync(working_folder + product + '/ViewController.h','utf8');
-		fileData = fileData.replace(new RegExp(old_product,'g'),product);
-		fileData = fileData.replace(new RegExp(old_org,'g'),org);
-		fileData = fileData.replace(new RegExp(old_name,'g'),name);
-		result = fs.writeFileSync(working_folder + product + '/ViewController.h',fileData,'utf8');
+		result = rewriteFileWithChanges(working_folder + product + '/ViewController.h',[ 
+			{ before:old_product, after:product }, 
+			{ before:old_org, after:org },
+			{ before:old_name, after:name }
+		]);
 		if (result) exitWithMessageAndCode('Result returned while overwriting product/ViewController.h.');
 
 		// Rewrite the ViewController.m file:
-		fileData = fs.readFileSync(working_folder + product + '/ViewController.m','utf8');
-		fileData = fileData.replace(new RegExp(old_product,'g'),product);
-		fileData = fileData.replace(new RegExp(old_org,'g'),org);
-		fileData = fileData.replace(new RegExp(old_name,'g'),name);
-		fileData = fileData.replace(new RegExp(old_appid,'g'),appid);
-		fileData = fileData.replace(new RegExp(old_key,'g'),key);
-		result = fs.writeFileSync(working_folder + product + '/ViewController.m',fileData,'utf8');
+		result = rewriteFileWithChanges(working_folder + product + '/ViewController.m',[ 
+			{ before:old_product, after:product }, 
+			{ before:old_org, after:org },
+			{ before:old_name, after:name },
+			{ before:old_appid, after:appid },
+			{ before:old_key, after:key }
+		]);
 		if (result) exitWithMessageAndCode('Result returned while overwriting product/ViewController.m.');
 
 		// Rewrite the main.m file:
-		fileData = fs.readFileSync(working_folder + product + '/main.m','utf8');
-		fileData = fileData.replace(new RegExp(old_product,'g'),product);
-		fileData = fileData.replace(new RegExp(old_org,'g'),org);
-		fileData = fileData.replace(new RegExp(old_name,'g'),name);
-		result = fs.writeFileSync(working_folder + product + '/main.m',fileData,'utf8');
+		result = rewriteFileWithChanges(working_folder + product + '/main.m',[ 
+			{ before:old_product, after:product }, 
+			{ before:old_org, after:org },
+			{ before:old_name, after:name }
+		]);
 		if (result) exitWithMessageAndCode('Result returned while overwriting product/main.m.');
 
 		// Rewrite the contents.xcworkspacedata file:
-		fileData = fs.readFileSync(working_folder + product + '.xcodeproj/project.xcworkspace/contents.xcworkspacedata','utf8');
-		fileData = fileData.replace(new RegExp(old_product,'g'),product);
-		result = fs.writeFileSync(working_folder + product + '.xcodeproj/project.xcworkspace/contents.xcworkspacedata',fileData,'utf8');
+		result = rewriteFileWithChanges(working_folder + product + '.xcodeproj/project.xcworkspace/contents.xcworkspacedata',[ 
+			{ before:old_product, after:product }
+		]);		
 		if (result) exitWithMessageAndCode('Result returned while overwriting product.xcodeproj/project.xcworkspace/contents.xcworkspacedata.');
 
 		// Zip up the project into the output folder:
@@ -238,4 +239,15 @@ function exitWithMessageAndCode(message, code) {
 	console.log((code == 0 ? message : 'Fatal error: ' + message));
 	process.exit(code >= 0 ? code * -1 : -1);
 
+}
+
+function rewriteFileWithChanges(fileToChange, changes) {
+	var fileData = fs.readFileSync(fileToChange, 'utf8');
+	for (var i = 0; i < changes.length; i++) { 
+		var change = changes[i];
+		if (change.before && change.after) {
+			fileData = fileData.replace(new RegExp(change.before,'g'), change.after);
+		}
+	}
+	return fs.writeFileSync(fileToChange, fileData, 'utf8');
 }
