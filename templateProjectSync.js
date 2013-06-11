@@ -9,7 +9,7 @@
 var hat = require('hat');
 var http = require('http');
 var fs = require('fs');
-// execSync is a layer around the 'child-process' modules 'exec' method
+// execSync is a blocking layer around the 'child-process' modules 'exec' method
 var execSync = require('execSync');
 
 // Define the templates, the available options and the search/replace tokens.
@@ -44,7 +44,7 @@ if (!process.env.template && process.env.TESTMODE != 1) {
 
 // The Product Name variable is the only potentially dangerous value, as it is used in exec functions and as a filepath parameter.
 // This is easily sanitized by requiring only letters, numbers, and dash/underscore.
-if (!process.env.product || !process.env.product.match(/^[\w_-]+$/)) {
+if (!process.env.product || !process.env.product.match(/^[\w]+$/)) {
 	exitWithMessageAndCode('Product name invalid.',70);
 }
 
