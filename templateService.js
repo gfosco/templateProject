@@ -16,7 +16,6 @@ router.get('/output_folder/*/*', function (req, res, token, file) {
 });
 
 // Comment out these two routes to remove the UI and allow only POST to / and downloads from output folder.
-/*
 router.get('/public/*', function (req, res, file) { 
 	log('Got download attempt for ' + file);
 	return fileserver.serveFile(file, 200, {}, req, res);
@@ -25,7 +24,6 @@ router.get('/public/*', function (req, res, file) {
 router.get('/', function (req, res) { 
 	return pubserver.serveFile('index.html',200,{}, req, res);
 });
-*/
 
 router.post('/', function (req, res) {
 
@@ -53,7 +51,7 @@ router.post('/', function (req, res) {
 				'bundle':fields.bundlepfx,
 				'fbid':(fields.fbid ? fields.fbid : ''),
 				'fbname':(fields.fbname ? fields.fbname : ''),
-				'enable':enablearray ? enablearray : ['NONE']
+				'template':(fields.fbid ? 'HACKPROD' : 'QWERTYPROD')
 			}
 		},
 			function (error, stdout, stderr) {
