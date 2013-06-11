@@ -7,10 +7,22 @@ var cleanCommand = 'rm -rf ./working_folder/*';
 result = execSync.exec(cleanCommand);
 if (result.code) exitWithMessageAndCode('Return code ' + result.code + ' while cleaning up working folders');
 
+var cleanCommand = 'touch ./working_folder/placeholder';
+result = execSync.exec(cleanCommand);
+if (result.code) exitWithMessageAndCode('Return code ' + result.code + ' while touching working folder');
+
 cleanCommand = 'rm -rf ./output_folder/*';
 result = execSync.exec(cleanCommand);
 if (result.code) exitWithMessageAndCode('Return code ' + result.code + ' while cleaning up output folders');
 
+var cleanCommand = 'touch ./output_folder/placeholder';
+result = execSync.exec(cleanCommand);
+if (result.code) exitWithMessageAndCode('Return code ' + result.code + ' while touching output folder');
+
+exitWithMessageAndCode("Cleaned up.",0);
+
+//
+//
 
 function exitWithMessageAndCode(message, code) { 
 
