@@ -42,8 +42,27 @@ if (!process.env.template && process.env.TESTMODE != 1) {
 	exitWithMessageAndCode('Template not provided.',80);
 }
 
+// The Product Name variable is the only potentially dangerous value, as it is used in exec functions and as a filepath parameter.
+// This is easily sanitized by requiring only letters, numbers, and dash/underscore.
+if (!process.env.product || !process.env.product.match(/^[\w_-]+$/)) {
+	exitWithMessageAndCode('Product name invalid.',70);
+}
+
+// TODO: When the UI enforces the right template, this can be removed, but for now we set
+//       the templated based on the provided values.
+process.env.template = process.env.fbid ? 'HACKPROD' : 'QWERTYPROD';
+
+
+// None of the values are optional, so lets check they're all provided.
+// The only v
+
+// Run the process.
 makeTemplate(process.env);
 
+// 
+//
+
+// With TESTMODE=1 these default values will be used.
 function mockOptions() { 
 
 	return {
@@ -59,30 +78,26 @@ function mockOptions() {
 
 }
 
+
+
 function makeTemplate(options) { 
 
-	var defaultOptions = mockOptions();
-	options = options || defaultOptions;
+	options = process.env.TESTMODE == 1 ? mockOptions() : options;
 
-	var product = options['product'] || defaultOptions.product;
-	var org = options['organization'] || defaultOptions.organization;
-	var bundle = options['bundle'] || defaultOptions.bundle;
-	var appid = options['parseAppId'] || defaultOptions.parseAppId;
-	var key = options['parseKey'] || defaultOptions.parseKey;
-	var name = options['name'] || defaultOptions.name;
-	var template = options['template'] || defaultOptions.template;
-	var enable = options['enable'] || defaultOptions.enable;
+	var product = options['product'];
+	var org = options['organization'];
+	var bundle = options['bundle'];
+	var appid = options['parseAppId'];
+	var key = options['parseKey'];
+	var name = options['name'];
+	var template = options['template'];
+	var enable = options['enable'];
 	var fbid = '';
 	var fbname = '';
 
 	if (options['fbid'] && options['fbname']) {
-		template = 'HACKPROD';
 		fbid = options['fbid'];
 		fbname = options['fbname'];
-	}
-
-	if (!product.match(/^[\w_-]+$/)) {
-		exitWithMessageAndCode("Invalid Product Name.");
 	}
 
 	if (Templates[template]) {
@@ -145,16 +160,6 @@ function makeTemplate(options) {
 		appdh = appdh.replace(new RegExp(old_name,'g'),name);
 		appdh = appdh.replace(new RegExp(old_appid,'g'),appid);
 		appdh = appdh.replace(new RegExp(old_key,'g'),key);
-		if (temp = Templates[template]['ENABLE_FLAGS']['AppDelegate.m']) {
-			for (var i = 0; i < temp.length; i++) {
-				if (enable.indexOf(temp[i]) !== -1) {
-					appdh = appdh.replace(new RegExp('\\/\\* ENABLE_' + temp[i],'g'),'');
-					appdh = appdh.replace(new RegExp('ENABLE_' + temp[i] + ' \\*\\/','g'),'');
-				} else {
-
-				}
-			}
-		}
 		result = fs.writeFileSync(working_folder + product + '/AppDelegate.m',appdh,'utf8');
 		if (result) exitWithMessageAndCode('Result returned while overwriting product/AppDelegate.m.');
 
